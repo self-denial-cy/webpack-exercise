@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
     entry: {
@@ -9,5 +9,13 @@ module.exports = {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js'
     },
-    mode: 'production'
-}
+    mode: 'production',
+    module: {
+        rules: [
+            {
+                test: /.js$/,
+                use: 'babel-loader'
+            }
+        ]
+    }
+};
