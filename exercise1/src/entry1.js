@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './css/entry1.css';
 
 class App extends React.Component {
     render() {
-        return <div>App Text</div>;
+        return <div className="app-text">App Text</div>;
     }
 }
 
