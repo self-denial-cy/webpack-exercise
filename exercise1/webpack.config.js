@@ -27,6 +27,10 @@ module.exports = {
                 test: /.less$/,
                 // less-loader 用于将 less 转换为 css
                 use: ['style-loader', 'css-loader', 'less-loader']
+            },
+            {
+                test: /.(png|jpg|gif|jpeg)$/,
+                use: 'file-loader'
             }
         ]
     }
