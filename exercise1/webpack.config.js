@@ -30,6 +30,19 @@ module.exports = {
             },
             {
                 test: /.(png|jpg|gif|jpeg)$/,
+                // use: 'file-loader'
+                // url-loader 内部也使用了 file-loader，设置 limit 后，低于该阈值的文件则会被 base64
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 51200
+                        }
+                    }
+                ]
+            },
+            {
+                test: /.(woff|woff2|eot|ttf|otf)$/,
                 use: 'file-loader'
             }
         ]

@@ -2,3 +2,4 @@
 **/node_modules
 exercise1/dist/*.js
 exercise1/dist/*.png
+exercise1/dist/*.ttf
