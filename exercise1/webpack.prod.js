@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 
 // 文件指纹：打包后输出的文件名的后缀；
 // 1.用于版本管理
@@ -9,6 +10,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // 1.hash 和整个项目的构建相关，只要项目文件有变更，整个项目构建的 hash 值就会改变
 // 2.chunkhash 和 webpack 打包的 chunk 有关，不同的 entry 会生成不同的 chunkhash 值
 // 3.contenthash 根据文件内容来定义 hash，文件内容不变，则 contenthash 不变
+
+// 代码压缩
+// js 压缩：webpack 内置了 uglifyjs-webpack-plugin（默认就会对 js 文件进行压缩）
+// css 压缩：使用 optimize-css-assets-webpack-plugin 同时使用 cssnano
+// html 压缩：使用 html-webpack-plugin，设置压缩参数
 
 module.exports = {
     entry: {
@@ -69,6 +75,10 @@ module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
             filename: 'css/[name]_[contenthash:8].css'
+        }),
+        new OptimizeCssAssetsWebpackPlugin({
+            assetNameRegExp: /\.css$/g,
+            cssProcessor: require('cssnano')
         })
     ]
 };
