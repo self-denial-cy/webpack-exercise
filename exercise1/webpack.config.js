@@ -1,4 +1,5 @@
 const path = require('path');
+const {HotModuleReplacementPlugin} = require('webpack');
 
 module.exports = {
     // 文件监听是在发现源码发生变化时，自动重新构建出新的输出文件
@@ -22,7 +23,7 @@ module.exports = {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js'
     },
-    mode: 'production',
+    mode: 'development',
     module: {
         rules: [
             {
@@ -59,5 +60,15 @@ module.exports = {
                 use: 'file-loader'
             }
         ]
+    },
+    plugins: [
+        // 除了 webpack 自带的 HotModuleReplacementPlugin 插件，还可以使用 webpack-dev-middleware 实现热更新
+        // WDM 可以将 webpack 输出的文件传输给服务器，适用于更灵活的定制场景（有相应业务场景的时候可以研究下）
+        // WDS 的功能类似封装好的 Express + WDM，开箱即用的同时缺少灵活的定制性
+        new HotModuleReplacementPlugin()
+    ],
+    devServer: {
+        contentBase: './dist',
+        hot: true
     }
 };
