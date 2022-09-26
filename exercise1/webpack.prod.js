@@ -1,6 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // 文件指纹：打包后输出的文件名的后缀；
 // 1.用于版本管理
@@ -79,6 +80,21 @@ module.exports = {
         new OptimizeCssAssetsWebpackPlugin({
             assetNameRegExp: /\.css$/g,
             cssProcessor: require('cssnano')
+        }),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, 'src/index.html'),
+            filename: 'index.html',
+            favicon: path.join(__dirname, 'src/favicon.ico'),
+            inject: true,
+            chunks: ['bundle1', 'bundle2'],
+            minify: {
+                html5: true,
+                collapseWhitespace: true,
+                preserveLineBreaks: false,
+                minifyCSS: true,
+                minifyJS: true,
+                removeComments: false
+            }
         })
     ]
 };

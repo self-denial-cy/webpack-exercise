@@ -1,6 +1,3 @@
 .idea
 **/node_modules
-exercise1/dist/**/*.js
-exercise1/dist/**/*.png
-exercise1/dist/**/*.ttf
-exercise1/dist/**/*.css
+**/dist
