@@ -3,9 +3,9 @@ const {HotModuleReplacementPlugin} = require('webpack');
 
 module.exports = {
     // 文件监听是在发现源码发生变化时，自动重新构建出新的输出文件
-    // 开启监听模式有两种方法：1.启动 webpack 命令时，带上 --watch 参数；2.配置 webpack.config.js 中设置 watch:true
+    // 开启监听模式有两种方法：1.启动 webpack 命令时，带上 --watch 参数；2.配置 webpack.dev.js 中设置 watch:true
     // 唯一缺陷：新的构建输出必须手动重新加载（重新刷新浏览器等）
-    watch: true,
+    watch: false,
     // 文件监听的原理分析：轮询判断文件的最后编辑时间是否变化（某个文件发生了变化，并不会立刻告知监听者，而是先缓存起来，等 aggregateTimeout 后统一告知）
     watchOptions: {
         // 默认为空，不监听的文件或者文件夹，支持正则匹配
