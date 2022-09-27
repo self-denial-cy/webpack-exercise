@@ -25,6 +25,16 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // PostCSS 插件 autoprefixer 自动补齐 CSS3 前缀（因为 CSS3 尚未兼容各大浏览器）（根据 Can I Use 规则补齐前缀，最新的 autoprefixer 建议将 browserslist 配置在 package.json 或 .browserslistrc 文件中）
 // IE（Trident -ms） 火狐（Geko -moz） 谷歌（Webkit -webkit） Opera（Presto -o）
 
+// 移动端CSS px 自动转换为 rem（使用 px2rem-loader）
+// 随着移动设备的流行，各种分辨率的机型层出不穷，对页面适配兼容的要求较高
+// CSS 媒体查询实现响应式布局（缺陷：需要写多套适配样式代码）
+// CSS3 提出 rem 的概念：font-size of the root element（rem 是相对单位，px 是绝对单位）
+// 页面渲染时动态计算根元素的 font-size 值（使用 lib-flexible 库）
+
+// 静态资源内联
+// 代码层面：页面框架的初始化脚本、上报相关打点、css 内联避免页面闪动
+// 请求层面：减少 HTTP 网络请求数（小图片或者字体内联 url-loader）
+
 module.exports = {
     entry: {
         bundle1: './src/entry1.js',
