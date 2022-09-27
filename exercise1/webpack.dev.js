@@ -1,4 +1,6 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const {HotModuleReplacementPlugin} = require('webpack');
 
 module.exports = {
@@ -35,12 +37,38 @@ module.exports = {
                 // loader 调用顺序从后往前，先使用 css-loader 再使用 style-loader
                 // css-loader 用于加载 css 文件，并且转换为 commonjs 对象
                 // style-loader 将样式通过 style 标签插入到 head 中
-                use: ['style-loader', 'css-loader']
+                use: ['style-loader', 'css-loader', {
+                    loader: 'postcss-loader',
+                    options: {
+                        plugins: () => [
+                            require('autoprefixer')({
+                                browsers: [
+                                    'last 2 version',
+                                    '>1%',
+                                    'ios 7'
+                                ]
+                            })
+                        ]
+                    }
+                }]
             },
             {
                 test: /.less$/,
                 // less-loader 用于将 less 转换为 css
-                use: ['style-loader', 'css-loader', 'less-loader']
+                use: ['style-loader', 'css-loader', {
+                    loader: 'postcss-loader',
+                    options: {
+                        plugins: () => [
+                            require('autoprefixer')({
+                                browsers: [
+                                    'last 2 version',
+                                    '>1%',
+                                    'ios 7'
+                                ]
+                            })
+                        ]
+                    }
+                }, 'less-loader']
             },
             {
                 test: /.(png|jpg|gif|jpeg)$/,
@@ -50,7 +78,7 @@ module.exports = {
                     {
                         loader: 'url-loader',
                         options: {
-                            limit: 51200
+                            limit: 10240
                         }
                     }
                 ]
@@ -65,7 +93,15 @@ module.exports = {
         // 除了 webpack 自带的 HotModuleReplacementPlugin 插件，还可以使用 webpack-dev-middleware 实现热更新
         // WDM 可以将 webpack 输出的文件传输给服务器，适用于更灵活的定制场景（有相应业务场景的时候可以研究下）
         // WDS 的功能类似封装好的 Express + WDM，开箱即用的同时缺少灵活的定制性
-        new HotModuleReplacementPlugin()
+        new HotModuleReplacementPlugin(),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, 'src/index.html'),
+            filename: 'index.html',
+            favicon: path.join(__dirname, 'src/favicon.ico'),
+            inject: true,
+            chunks: ['bundle1', 'bundle2']
+        }),
+        new CleanWebpackPlugin()
     ],
     devServer: {
         contentBase: './dist',

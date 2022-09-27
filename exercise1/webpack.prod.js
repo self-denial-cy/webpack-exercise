@@ -22,6 +22,9 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // 通过 npm scripts 清理构建目录 rm -rf ./dist && webpack | rimraf ./dist && webpack（暴力，不够优雅）
 // 使用 clean-webpack-plugin 默认会删除 output 指定的输出目录
 
+// PostCSS 插件 autoprefixer 自动补齐 CSS3 前缀（因为 CSS3 尚未兼容各大浏览器）（根据 Can I Use 规则补齐前缀，最新的 autoprefixer 建议将 browserslist 配置在 package.json 或 .browserslistrc 文件中）
+// IE（Trident -ms） 火狐（Geko -moz） 谷歌（Webkit -webkit） Opera（Presto -o）
+
 module.exports = {
     entry: {
         bundle1: './src/entry1.js',
@@ -44,11 +47,37 @@ module.exports = {
                 // style-loader 与 MiniCssExtractPlugin.loader 的功能互斥，不能同时使用
                 // 前者将 css 代码通过 style 标签嵌入到 head 中
                 // 后者将 css 代码单独抽离出文件
-                use: [MiniCssExtractPlugin.loader, 'css-loader']
+                use: [MiniCssExtractPlugin.loader, 'css-loader', {
+                    loader: 'postcss-loader',
+                    options: {
+                        plugins: () => [
+                            require('autoprefixer')({
+                                browsers: [
+                                    'last 2 version',
+                                    '>1%',
+                                    'ios 7'
+                                ]
+                            })
+                        ]
+                    }
+                }]
             },
             {
                 test: /.less$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader']
+                use: [MiniCssExtractPlugin.loader, 'css-loader', {
+                    loader: 'postcss-loader',
+                    options: {
+                        plugins: () => [
+                            require('autoprefixer')({
+                                browsers: [
+                                    'last 2 version',
+                                    '>1%',
+                                    'ios 7'
+                                ]
+                            })
+                        ]
+                    }
+                }, 'less-loader']
             },
             // 针对文件资源的文件指纹设置的占位符：[ext] 资源后缀名 [name] 文件名称 [path] 文件相对路径 [folder] 文件所在文件夹 [contenthash] 文件内容hash（md5生成）
             // [hash] 文件内容hash（md5生成） [emoji] 一个随机的指代文件内容的 emoji
