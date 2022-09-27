@@ -34,6 +34,12 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // 静态资源内联
 // 代码层面：页面框架的初始化脚本、上报相关打点、css 内联避免页面闪动
 // 请求层面：减少 HTTP 网络请求数（小图片或者字体内联 url-loader）
+// HTML 和 JS 内联
+// raw-loader 内联 html：${ require('raw-loader!./meta.html') }
+// raw-loader 内联 JS：<script>${ require('raw-loader!babel-loader!../node_modules/lib-flexible') }</script>
+// CSS 内联
+// 方案一：借助 style-loader
+// 方案二：html-inline-css-webpack-plugin
 
 module.exports = {
     entry: {
@@ -58,6 +64,14 @@ module.exports = {
                 // 前者将 css 代码通过 style 标签嵌入到 head 中
                 // 后者将 css 代码单独抽离出文件
                 use: [MiniCssExtractPlugin.loader, 'css-loader', {
+                    loader: 'px2rem-loader',
+                    options: {
+                        // rem 与 px 转换比例 1rem = 37.5px
+                        remUnit: 37.5,
+                        // 转换后得到的 rem 保留小数点后 8 位
+                        remPrecesion: 8
+                    }
+                }, {
                     loader: 'postcss-loader',
                     options: {
                         plugins: () => [
@@ -75,6 +89,14 @@ module.exports = {
             {
                 test: /.less$/,
                 use: [MiniCssExtractPlugin.loader, 'css-loader', {
+                    loader: 'px2rem-loader',
+                    options: {
+                        // rem 与 px 转换比例 1rem = 37.5px
+                        remUnit: 37.5,
+                        // 转换后得到的 rem 保留小数点后 8 位
+                        remPrecesion: 8
+                    }
+                }, {
                     loader: 'postcss-loader',
                     options: {
                         plugins: () => [

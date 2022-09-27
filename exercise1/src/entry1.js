@@ -7,7 +7,7 @@ class App extends React.Component {
     render() {
         return <div className="app-text">
             <span>富婆饿饿饭饭</span>
-            <img src={image} alt="富婆饿饿饭饭"/>
+            <img className="app-img" src={image} alt="富婆饿饿饭饭"/>
         </div>;
     }
 }

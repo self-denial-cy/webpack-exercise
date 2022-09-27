@@ -38,6 +38,14 @@ module.exports = {
                 // css-loader 用于加载 css 文件，并且转换为 commonjs 对象
                 // style-loader 将样式通过 style 标签插入到 head 中
                 use: ['style-loader', 'css-loader', {
+                    loader: 'px2rem-loader',
+                    options: {
+                        // rem 与 px 转换比例 1rem = 37.5px
+                        remUnit: 37.5,
+                        // 转换后得到的 rem 保留小数点后 8 位
+                        remPrecesion: 8
+                    }
+                }, {
                     loader: 'postcss-loader',
                     options: {
                         plugins: () => [
@@ -56,6 +64,14 @@ module.exports = {
                 test: /.less$/,
                 // less-loader 用于将 less 转换为 css
                 use: ['style-loader', 'css-loader', {
+                    loader: 'px2rem-loader',
+                    options: {
+                        // rem 与 px 转换比例 1rem = 37.5px
+                        remUnit: 37.5,
+                        // 转换后得到的 rem 保留小数点后 8 位
+                        remPrecesion: 8
+                    }
+                }, {
                     loader: 'postcss-loader',
                     options: {
                         plugins: () => [
