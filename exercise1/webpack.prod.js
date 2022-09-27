@@ -2,6 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // 文件指纹：打包后输出的文件名的后缀；
 // 1.用于版本管理
@@ -16,6 +17,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // js 压缩：webpack 内置了 uglifyjs-webpack-plugin（默认就会对 js 文件进行压缩）
 // css 压缩：使用 optimize-css-assets-webpack-plugin 同时使用 cssnano
 // html 压缩：使用 html-webpack-plugin，设置压缩参数
+
+// 自动清理构建目录产物
+// 通过 npm scripts 清理构建目录 rm -rf ./dist && webpack | rimraf ./dist && webpack（暴力，不够优雅）
+// 使用 clean-webpack-plugin 默认会删除 output 指定的输出目录
 
 module.exports = {
     entry: {
@@ -95,6 +100,7 @@ module.exports = {
                 minifyJS: true,
                 removeComments: false
             }
-        })
+        }),
+        new CleanWebpackPlugin()
     ]
 };
