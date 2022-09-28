@@ -5,6 +5,7 @@ import image from './imgs/1.png';
 
 class App extends React.Component {
     render() {
+        debugger
         return <div className="app-text">
             <span>富婆饿饿饭饭</span>
             <img className="app-img" src={image} alt="富婆饿饿饭饭"/>

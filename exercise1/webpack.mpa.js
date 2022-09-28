@@ -9,6 +9,9 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // 动态获取 entry 和设置 html-webpack-plugin 数量
 // 使用 glob.sync
 
+// 使用 sourcemap（通过 sourcemap 可以定位到源代码）
+// 一般情况下：开发环境开启便于调试，线上环境关闭（线上排查问题的时候可以将 sourcemap 上传到错误监控系统）
+
 const setMPA = () => {
     const entry = {};
     const htmlWebpackPlugins = [];
