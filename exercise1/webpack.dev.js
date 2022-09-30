@@ -122,5 +122,7 @@ module.exports = {
     devServer: {
         contentBase: './dist',
         hot: true
-    }
+    },
+    // 个人推荐：开发环境使用 eval-cheap-module-source-map；生产环境使用 hidden-cheap-module-source-map（可将生成的 map 文件上传至错误监控平台）
+    devtool: 'eval-cheap-module-source-map'
 };
