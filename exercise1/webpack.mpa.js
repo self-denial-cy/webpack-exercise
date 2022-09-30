@@ -12,6 +12,10 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // 使用 sourcemap（通过 sourcemap 可以定位到源代码）
 // 一般情况下：开发环境开启便于调试，线上环境关闭（线上排查问题的时候可以将 sourcemap 上传到错误监控系统）
 
+// 提取页面公共资源
+// 1.基础库分离：思路（将 react react-dom 基础库包通过 cdn 引入，不打入 bundle 中）；方法（使用 html-webpack-externals-plugin）（使用好像有点问题，先暂时不用）
+// 2.利用 SplitChunksPlugin 分离基础包|页面公共文件
+
 const setMPA = () => {
     const entry = {};
     const htmlWebpackPlugins = [];
@@ -124,5 +128,23 @@ module.exports = {
             cssProcessor: require('cssnano')
         }),
         new CleanWebpackPlugin()
-    ].concat(htmlWebpackPlugins)
+    ].concat(htmlWebpackPlugins),
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+            minSize: 0,
+            cacheGroups: {
+                vendors: {
+                    test: /(react|react-dom)/,
+                    priority: 2,
+                    name: 'vendor'
+                },
+                commons: {
+                    priority: 1,
+                    name: 'common',
+                    minChunks: 2
+                }
+            }
+        }
+    }
 };
