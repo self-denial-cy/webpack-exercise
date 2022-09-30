@@ -16,6 +16,11 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // 1.基础库分离：思路（将 react react-dom 基础库包通过 cdn 引入，不打入 bundle 中）；方法（使用 html-webpack-externals-plugin）（使用好像有点问题，先暂时不用）
 // 2.利用 SplitChunksPlugin 分离基础包|页面公共文件
 
+// tree shaking（摇树优化）
+// 概念：模块中可能有多个方法，只要其中的某个方法使用到了，则整个模块都会被打包到 bundle 中，tree shaking 就是只把使用到的方法打包到 bundle 中。没用到的方法会在 uglify 阶段被擦除掉
+// 要求：必须是 ES6 的语法，CJS 的方式不支持（ES6 的语法支持静态分析）
+// 使用：webpack 默认支持，production mode 的情况下默认开启
+
 const setMPA = () => {
     const entry = {};
     const htmlWebpackPlugins = [];
