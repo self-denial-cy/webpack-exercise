@@ -20,6 +20,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // 概念：模块中可能有多个方法，只要其中的某个方法使用到了，则整个模块都会被打包到 bundle 中，tree shaking 就是只把使用到的方法打包到 bundle 中。没用到的方法会在 uglify 阶段被擦除掉
 // 要求：必须是 ES6 的语法，CJS 的方式不支持（ES6 的语法支持静态分析）
 // 使用：webpack 默认支持，production mode 的情况下默认开启
+// 原理：利用 ES6 模块的特点：1.只能作为模块顶层的语句出现；2.import 的模块名只能是字符串常量；3.import binding 是 immutable 的
+// DCE（dead code elimination）：代码不会被执行，不可到达|代码执行的结果不会被用到|代码只会影响死变量（只写不读）
 
 const setMPA = () => {
     const entry = {};
