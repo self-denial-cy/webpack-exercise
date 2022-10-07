@@ -37,6 +37,11 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // 对比：通过 Scope Hoisting 可以减少函数声明代码和内存开销
 // 使用：webpack mode 为 production 默认开启（必须是 ES6 语法，CJS 不支持）
 
+// 代码分割和动态 import
+// 意义：对于大型 Web 应用来讲，将所有代码都放在一个文件中显然是不够有效的，特别是当某些代码块是在某些特殊的时候才会被使用到。webpack 有一个功能就是将代码库分割成 chunks，当代码运行到需要它们的时候再进行加载
+// 适用场景：1.抽离相同代码到一个共享块；2.脚本懒加载，使得初始下载的代码更小
+// 懒加载 JS 脚本的方式：1.CommonJS：require.ensure；2.ES6：动态 import（目前还没有原生支持，需要 babel 转换（@babel/plugin-syntax-dynamic-import））
+
 const setMPA = () => {
     const entry = {};
     const htmlWebpackPlugins = [];
