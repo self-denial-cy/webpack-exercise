@@ -6,7 +6,8 @@
     "build:mpa": "webpack --config webpack.mpa.js",
     "watch": "webpack --watch --config webpack.dev.js",
     "dev": "webpack-dev-server --open --config webpack.dev.js",
-    "build:lib": "webpack --config webpack.lib.js"
+    "build:lib": "webpack --config webpack.lib.js",
+    "build:ssr": "webpack --config webpack.ssr.js"
   },
   "devDependencies": {
     "@babel/core": "^7.19.1",
@@ -43,6 +44,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }
