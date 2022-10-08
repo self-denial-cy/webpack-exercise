@@ -1,11 +1,14 @@
 if (typeof window === 'undefined') global.window = {}
 
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const {renderToString} = require('react-dom/server');
 const SSR = require('../dist/home');
+const template = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf-8');
 
 const renderMarkup = (html) => {
-    return `<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><title>Home</title></head><body><div id="react-app">${html}</div></body></html>`;
+    return template.replace('<!--HTML_PLACEHOLDER-->', html);
 };
 
 const server = (port) => {
