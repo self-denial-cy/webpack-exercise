@@ -1,0 +1,51 @@
+[
+  {
+    "link": "https:\/\/time.geekbang.org\/",
+    "name": "讲堂",
+    "alias": "Index"
+  },
+  {
+    "link": "https:\/\/horde.geekbang.org\/home",
+    "name": "部落",
+    "alias": "Horde"
+  },
+  {
+    "name": "提薪训练营",
+    "link": "https:\/\/u.geekbang.org\/",
+    "hot": true
+  },
+  {
+    "name": "云原生训练营",
+    "link": "https:\/\/u.geekbang.org\/subject\/cloudnative?utm_source=geektime-web&utm_medium=jiangtangcourse&utm_term=timewebmenu&utm_identify=geektime&utm_content=menu&utm_campaign=timewebmenu&gk_cus_user_wechat=university",
+    "new": true
+  },
+  {
+    "name": "架构实战营",
+    "link": "https:\/\/u.geekbang.org\/subject\/arch2nd?utm_source=geektime-web&utm_medium=jiangtangcourse&utm_term=timewebmenu&utm_identify=geektime&utm_content=menu&utm_campaign=timewebmenu&gk_cus_user_wechat=university"
+  },
+  {
+    "link": "https:\/\/b.geekbang.org\/?utm_source=geektimeweb&utm_medium=menu&utm_campaign=newregister&gk_source=2021012801_geektimewebmenu_newregister",
+    "name": "企业版",
+    "service": true
+  },
+  {
+    "link": "https:\/\/h5.youzan.com\/v2\/feature\/TJe4bYhxyP?dc_ps=2293231415741009926.200001",
+    "name": "极客商城"
+  },
+  {
+    "link": "https:\/\/time.geekbang.org\/service\/exchange",
+    "name": "兑换中心",
+    "alias": "Code"
+  },
+  {
+    "link": "https:\/\/time.geekbang.org\/download",
+    "name": "App下载",
+    "alias": "Download",
+    "download": true
+  },
+  {
+    "link": "https:\/\/time.geekbang.org\/download\/extensions",
+    "name": "浏览器插件",
+    "alias": "DownloadExtensions"
+  }
+]
