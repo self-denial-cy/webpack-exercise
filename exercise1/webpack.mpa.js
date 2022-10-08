@@ -84,7 +84,11 @@ module.exports = {
         rules: [
             {
                 test: /.js$/,
-                use: 'babel-loader'
+                use: [
+                    'babel-loader',
+                    // 开启 eslint
+                    // 'eslint-loader'
+                ]
             },
             {
                 test: /.css$/,
