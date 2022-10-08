@@ -1,7 +1,7 @@
-const React=require('react');
+const React = require('react');
+const image = require('../src/imgs/1.png');
 require('../src/css/entry1.css');
 require('../src/less/entry2.less');
-const image=require('../src/imgs/1.png');
 
 class Home extends React.Component {
     render() {
