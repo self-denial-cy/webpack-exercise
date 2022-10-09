@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const {HotModuleReplacementPlugin} = require('webpack');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 module.exports = {
     // 文件监听是在发现源码发生变化时，自动重新构建出新的输出文件
@@ -117,11 +118,15 @@ module.exports = {
             inject: true,
             chunks: ['bundle1', 'bundle2']
         }),
-        new CleanWebpackPlugin()
+        new CleanWebpackPlugin(),
+        // 日志优化
+        new FriendlyErrorsWebpackPlugin()
     ],
     devServer: {
         contentBase: './dist',
-        hot: true
+        hot: true,
+        // 日志优化
+        stats: 'none'
     },
     // 个人推荐：开发环境使用 eval-cheap-module-source-map；生产环境使用 hidden-cheap-module-source-map（可将生成的 map 文件上传至错误监控平台）
     devtool: 'eval-cheap-module-source-map'

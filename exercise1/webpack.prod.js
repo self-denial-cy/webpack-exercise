@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 // 文件指纹：打包后输出的文件名的后缀；
 // 1.用于版本管理
@@ -162,6 +163,11 @@ module.exports = {
                 removeComments: false
             }
         }),
-        new CleanWebpackPlugin()
-    ]
+        new CleanWebpackPlugin(),
+        // 日志优化
+        // TODO 日志中应显示输出文件分析
+        new FriendlyErrorsWebpackPlugin()
+    ],
+    // 日志优化
+    stats: 'none'
 };
