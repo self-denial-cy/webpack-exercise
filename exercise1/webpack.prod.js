@@ -166,7 +166,19 @@ module.exports = {
         new CleanWebpackPlugin(),
         // 日志优化
         // TODO 日志中应显示输出文件分析
-        new FriendlyErrorsWebpackPlugin()
+        new FriendlyErrorsWebpackPlugin(),
+        // 捕获构建异常并中断进程（一般用于 webpack 参与 CI/CD 流的情况）
+        function () {
+            // 这里的 this 指代 compiler 对象，compiler 在每次构建结束后都会触发 done 这个 hook
+            // console.log(this)
+            this.hooks.done.tap('done', (stats) => {
+                // 根据 errors 判断当前构建是否有异常
+                // console.log(stats.compilation.errors)
+                // process.exit 主动处理构建异常
+                // process.exit(1)
+                console.log('build complete')
+            })
+        }
     ],
     // 日志优化
     stats: 'none'
