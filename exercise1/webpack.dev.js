@@ -31,7 +31,7 @@ module.exports = {
         rules: [
             {
                 test: /.js$/,
-                use: 'babel-loader'
+                use: 'babel-loader?compact=false'
             },
             {
                 test: /.css$/,
