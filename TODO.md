@@ -1,5 +1,5 @@
 - [ ] 极客时间webpack4网课（进行中）
 - [ ] learn-webpack-start结合公众号文章迁移
-- [ ] webpack4最佳配置实践（project）整理
+- [ ] webpack4最佳配置实践（app）整理
 - [ ] webpack4最佳配置实践（lib）整理
 - [ ] webpack官方文档精读（优先5其次4）
