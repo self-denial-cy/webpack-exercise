@@ -42,13 +42,16 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 // 方案一：借助 style-loader
 // 方案二：html-inline-css-webpack-plugin
 
+// 防止 webpack 配置文件不在项目根目录下的情况
+const rootDir = process.cwd();
+
 module.exports = {
     entry: {
         bundle1: './src/entry1.js',
         bundle2: './src/entry2.js'
     },
     output: {
-        path: path.join(__dirname, 'dist'),
+        path: path.join(rootDir, 'dist'),
         // js 文件指纹建议使用 chunkhash
         filename: 'js/[name]_[chunkhash:8].js'
     },
@@ -149,9 +152,9 @@ module.exports = {
             cssProcessor: require('cssnano')
         }),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src/index.html'),
+            template: path.join(rootDir, 'src/index.html'),
             filename: 'index.html',
-            favicon: path.join(__dirname, 'src/favicon.ico'),
+            favicon: path.join(rootDir, 'src/favicon.ico'),
             inject: true,
             chunks: ['bundle1', 'bundle2'],
             minify: {
@@ -173,11 +176,11 @@ module.exports = {
             // console.log(this)
             this.hooks.done.tap('done', (stats) => {
                 // 根据 errors 判断当前构建是否有异常
-                // console.log(stats.compilation.errors)
+                // console.log(stats.compilation.errors);
                 // process.exit 主动处理构建异常
-                // process.exit(1)
-                console.log('build complete')
-            })
+                // process.exit(1);
+                console.log('build complete');
+            });
         }
     ],
     // 日志优化
