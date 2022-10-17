@@ -13,3 +13,24 @@
   - Jasmine
   - Jest（推荐学习）
 - 极简 API
+
+#### 持续集成
+
+- 优点
+  - 快速发现错误
+  - 防止分支大幅偏离主干
+- 核心措施：代码集成到主干之前，必须通过自动化测试（只要有一个测试用例失败，就不能集成）
+
+#### GitHub 最流行的 CI（Top 10）
+
+- Travis CI（收费且贵）
+- Circle CI
+- Jenkins
+- AppVeyor
+- CodeShip
+- Drone
+- Semaphore CI
+- Buildkite
+- Wercker
+- TeamCity
+
