@@ -16,7 +16,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: pwd
-      - run: |
-          cd exercise1
+      - run: cd exercise1
       - run: npm ci
       - run: npm run test:smoke
