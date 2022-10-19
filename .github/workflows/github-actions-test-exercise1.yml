@@ -10,12 +10,10 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - run: pwd
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: pwd
       - run: cd exercise1
       - run: npm ci
       - run: npm run test:smoke
