@@ -18,5 +18,7 @@ jobs:
           cd ./exercise1
           pwd
           ls
-      - run: npm ci
-      - run: npm run test:smoke
+      - run: |
+          npm ci
+      - run: |
+          npm run test:smoke
