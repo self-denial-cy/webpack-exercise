@@ -1,6 +1,9 @@
 {
   "name": "webpack-exercise",
   "version": "1.0.0",
+  "scripts": {
+    "commitmsg": "validate-commit-msg"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/self-denial-cy/webpack-exercise.git"
@@ -9,5 +12,9 @@
   "bugs": {
     "url": "https://github.com/self-denial-cy/webpack-exercise/issues"
   },
-  "homepage": "https://github.com/self-denial-cy/webpack-exercise#readme"
+  "homepage": "https://github.com/self-denial-cy/webpack-exercise#readme",
+  "devDependencies": {
+    "husky": "^0.13.1",
+    "validate-commit-msg": "^2.11.1"
+  }
 }
