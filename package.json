@@ -3,6 +3,7 @@
   "version": "1.0.3",
   "scripts": {
     "commitmsg": "validate-commit-msg",
+    "preversion": "git pull --tags -f",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "postversion": "git push && git push origin --tags"
   },
