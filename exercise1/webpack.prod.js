@@ -5,6 +5,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
+// 体积分析
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
+
+// 速度分析
+const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin');
+const smp = new SpeedMeasureWebpackPlugin();
+
+const TerserPlugin = require('terser-webpack-plugin');
+
 // 文件指纹：打包后输出的文件名的后缀；
 // 1.用于版本管理
 // 2.对于没有变更的文件可以使用浏览器缓存，可以加快访问速度
@@ -45,7 +54,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 // 防止 webpack 配置文件不在项目根目录下的情况
 const rootDir = process.cwd();
 
-module.exports = {
+module.exports = smp.wrap({
     entry: {
         bundle1: './src/entry1.js',
         bundle2: './src/entry2.js'
@@ -60,7 +69,13 @@ module.exports = {
         rules: [
             {
                 test: /.js$/,
-                use: 'babel-loader'
+                use: [{
+                    // 多进程/多实例构建（适合模块数量多的情况下使用，否则没啥加速效果）
+                    loader: 'thread-loader',
+                    options: {
+                        workers: 1
+                    }
+                }, 'babel-loader']
             },
             {
                 test: /.css$/,
@@ -181,8 +196,17 @@ module.exports = {
                 // process.exit(1);
                 console.log('build complete');
             });
-        }
+        },
+        new BundleAnalyzerPlugin()
     ],
     // 日志优化
-    stats: 'none'
-};
+    stats: 'none',
+    optimization: {
+        minimizer: [
+            // 开启多进程并行压缩代码（量多情况下效果明显）
+            new TerserPlugin({
+                parallel: true
+            })
+        ]
+    }
+});
