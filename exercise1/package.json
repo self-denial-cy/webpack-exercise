@@ -10,7 +10,9 @@
     "build:ssr": "webpack --config webpack.ssr.js && node server/index.js",
     "test:smoke": "node test/smoke/index.js",
     "test:unit": "mocha",
-    "coverage": "istanbul cover node_modules/mocha/bin/_mocha test"
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha test",
+    "dll": "rimraf ./dll && webpack --config webpack.dll.js",
+    "build:dll": "npm run dll && npm run build"
   },
   "devDependencies": {
     "@babel/core": "^7.19.1",

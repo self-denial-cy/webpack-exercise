@@ -4,6 +4,7 @@ const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plug
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const webpack = require('webpack');
 
 // 体积分析
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
@@ -197,7 +198,10 @@ module.exports = smp.wrap({
                 console.log('build complete');
             });
         },
-        new BundleAnalyzerPlugin()
+        new BundleAnalyzerPlugin(),
+        new webpack.DllReferencePlugin({
+            manifest: path.join(__dirname, './dll/library.json')
+        })
     ],
     // 日志优化
     stats: 'none',

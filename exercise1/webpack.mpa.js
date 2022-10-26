@@ -69,7 +69,7 @@ const setMPA = () => {
     });
 
     return {entry, htmlWebpackPlugins};
-}
+};
 
 const {entry, htmlWebpackPlugins} = setMPA();
 
