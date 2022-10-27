@@ -15,6 +15,9 @@ const smp = new SpeedMeasureWebpackPlugin();
 
 const TerserPlugin = require('terser-webpack-plugin');
 
+// 启用缓存提升二次构建速度（babel-loader 开启缓存、terser-webpack-plugin 开启缓存、cache-loader 或者 hard-source-webpack-plugin）
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+
 // 文件指纹：打包后输出的文件名的后缀；
 // 1.用于版本管理
 // 2.对于没有变更的文件可以使用浏览器缓存，可以加快访问速度
@@ -76,7 +79,7 @@ module.exports = smp.wrap({
                     options: {
                         workers: 1
                     }
-                }, 'babel-loader']
+                }, 'babel-loader?cacheDirectory=true'] // babel-loader 开启缓存
             },
             {
                 test: /.css$/,
@@ -184,7 +187,6 @@ module.exports = smp.wrap({
         }),
         new CleanWebpackPlugin(),
         // 日志优化
-        // TODO 日志中应显示输出文件分析
         new FriendlyErrorsWebpackPlugin(),
         // 捕获构建异常并中断进程（一般用于 webpack 参与 CI/CD 流的情况）
         function () {
@@ -199,9 +201,10 @@ module.exports = smp.wrap({
             });
         },
         new BundleAnalyzerPlugin(),
-        new webpack.DllReferencePlugin({
+        new HardSourceWebpackPlugin() // hard-source-webpack-plugin 缓存
+        /*new webpack.DllReferencePlugin({
             manifest: path.join(__dirname, './dll/library.json')
-        })
+        })*/
     ],
     // 日志优化
     stats: 'none',
@@ -209,7 +212,8 @@ module.exports = smp.wrap({
         minimizer: [
             // 开启多进程并行压缩代码（量多情况下效果明显）
             new TerserPlugin({
-                parallel: true
+                parallel: true,
+                cache: true // terser-webpack-plugin 开启缓存
             })
         ]
     }
