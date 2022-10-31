@@ -79,7 +79,13 @@ module.exports = smp.wrap({
                     options: {
                         workers: 1
                     }
-                }, 'babel-loader?cacheDirectory=true'] // babel-loader 开启缓存
+                }, {
+                    loader: 'babel-loader',
+                    options: {
+                        exclude: 'node_modules', // 不对 node_modules 中的第三方包进行 babel 处理（基于第三方包质量高，发布到 npm 上时就已经 babel 处理过的前提）
+                        cacheDirectory: true // babel-loader 开启缓存
+                    }
+                }]
             },
             {
                 test: /.css$/,
@@ -216,5 +222,20 @@ module.exports = smp.wrap({
                 cache: true // terser-webpack-plugin 开启缓存
             })
         ]
+    },
+    // 性能优化（缩小文件搜索范围）
+    resolve: {
+        // 减少模块搜索层级（webpack 在寻找第三方模块的时候，会先从当前项目中寻找，找不到再向上追溯，直至到全局中寻找）
+        modules: [path.join(__dirname, 'node_modules')],
+        // 指定第三方模块 package.json 中的 main 字段是其入口文件
+        mainFields: ['main'],
+        // 优化对无后缀文件的链路寻找（import './a' = import './a.js'）
+        // 该配置项不宜过多，否则优化效果反而不佳
+        extensions: ['.js'],
+        // 直接指定引用路径（优先级高）
+        alias: {
+            'react': path.resolve(__dirname, './node_modules/react/index.js'),
+            'react-dom/client': path.resolve(__dirname, './node_modules/react-dom/client.js')
+        }
     }
 });
