@@ -45,6 +45,7 @@
     "mocha": "^6.1.4",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-loader": "^3.0.0",
+    "purgecss-webpack-plugin": "^1.5.0",
     "px2rem-loader": "^0.1.9",
     "raw-loader": "^0.5.1",
     "rimraf": "^2.6.3",

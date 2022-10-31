@@ -6,6 +6,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer')();
+const glob = require('glob');
+const PurgecssWebpackPlugin = require('purgecss-webpack-plugin');
 
 // 体积分析
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
@@ -58,6 +60,10 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 // 防止 webpack 配置文件不在项目根目录下的情况
 const rootDir = process.cwd();
+
+const PATHS = {
+    src: path.join(rootDir, './src')
+};
 
 module.exports = smp.wrap({
     entry: {
@@ -157,6 +163,9 @@ module.exports = smp.wrap({
         new MiniCssExtractPlugin({
             filename: 'css/[name]_[contenthash:8].css'
         }),
+        new PurgecssWebpackPlugin({
+            paths: glob.sync(`${PATHS.src}/**/*`, {nodir: true})
+        }),
         new OptimizeCssAssetsWebpackPlugin({
             assetNameRegExp: /\.css$/g,
             cssProcessor: require('cssnano')
@@ -191,7 +200,9 @@ module.exports = smp.wrap({
                 console.log('build complete');
             });
         },
-        new BundleAnalyzerPlugin(),
+        new BundleAnalyzerPlugin({
+            openAnalyzer: false // 关闭自动打开浏览器行为
+        }),
         new HardSourceWebpackPlugin() // hard-source-webpack-plugin 缓存
         /*new webpack.DllReferencePlugin({
             manifest: path.join(__dirname, './dll/library.json')
