@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const webpack = require('webpack');
+const autoprefixer = require('autoprefixer')();
 
 // 体积分析
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
@@ -103,15 +104,7 @@ module.exports = smp.wrap({
                 }, {
                     loader: 'postcss-loader',
                     options: {
-                        plugins: () => [
-                            require('autoprefixer')({
-                                browsers: [
-                                    'last 2 version',
-                                    '>1%',
-                                    'ios 7'
-                                ]
-                            })
-                        ]
+                        plugins: [autoprefixer]
                     }
                 }]
             },
@@ -128,15 +121,7 @@ module.exports = smp.wrap({
                 }, {
                     loader: 'postcss-loader',
                     options: {
-                        plugins: () => [
-                            require('autoprefixer')({
-                                browsers: [
-                                    'last 2 version',
-                                    '>1%',
-                                    'ios 7'
-                                ]
-                            })
-                        ]
+                        plugins: [autoprefixer]
                     }
                 }, 'less-loader']
             },
