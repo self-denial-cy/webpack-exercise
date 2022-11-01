@@ -200,9 +200,10 @@ module.exports = smp.wrap({
                 console.log('build complete');
             });
         },
-        new BundleAnalyzerPlugin({
-            openAnalyzer: false // 关闭自动打开浏览器行为
-        }),
+        // 先关闭，防止 GitHub Actions 得不到 0 的进程退出代码
+        // new BundleAnalyzerPlugin({
+        //     openAnalyzer: false // 关闭自动打开浏览器行为
+        // }),
         new HardSourceWebpackPlugin() // hard-source-webpack-plugin 缓存
         /*new webpack.DllReferencePlugin({
             manifest: path.join(__dirname, './dll/library.json')
