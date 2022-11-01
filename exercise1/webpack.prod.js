@@ -143,6 +143,28 @@ module.exports = smp.wrap({
                             // 图片文件指纹推荐使用 hash
                             name: 'imgs/[name]_[hash:8].[ext]'
                         }
+                    },
+                    {
+                        // 图片压缩（可以优化构建体积，但是对构建速度会有些许影响）
+                        loader: 'image-webpack-loader',
+                        options: {
+                            mozjpeg: {
+                                progressive: true
+                            },
+                            optipng: {
+                                enabled: false
+                            },
+                            pngquant: {
+                                quality: [0.65, 0.90],
+                                speed: 4
+                            },
+                            gifsicle: {
+                                interlaced: false
+                            },
+                            webp: {
+                                quality: 75
+                            }
+                        }
                     }
                 ]
             },

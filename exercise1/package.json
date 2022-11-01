@@ -38,6 +38,7 @@
     "glob-all": "^3.1.0",
     "hard-source-webpack-plugin": "^0.13.1",
     "html-webpack-plugin": "^4.5.2",
+    "image-webpack-loader": "^5.0.0",
     "istanbul": "^0.4.5",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
