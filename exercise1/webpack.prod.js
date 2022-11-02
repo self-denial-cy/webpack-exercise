@@ -144,7 +144,8 @@ module.exports = smp.wrap({
                             name: 'imgs/[name]_[hash:8].[ext]'
                         }
                     },
-                    {
+                    // 停用（在 mac 环境中有报错，回头看看是否有替代方案）
+                    /*{
                         // 图片压缩（可以优化构建体积，但是对构建速度会有些许影响）
                         loader: 'image-webpack-loader',
                         options: {
@@ -165,7 +166,7 @@ module.exports = smp.wrap({
                                 quality: 75
                             }
                         }
-                    }
+                    }*/
                 ]
             },
             {
@@ -211,7 +212,7 @@ module.exports = smp.wrap({
         // 日志优化
         new FriendlyErrorsWebpackPlugin(),
         // 捕获构建异常并中断进程（一般用于 webpack 参与 CI/CD 流的情况）
-        function () {
+        /*function () {
             // 这里的 this 指代 compiler 对象，compiler 在每次构建结束后都会触发 done 这个 hook
             // console.log(this)
             this.hooks.done.tap('done', (stats) => {
@@ -221,7 +222,7 @@ module.exports = smp.wrap({
                 // process.exit(1);
                 console.log('build complete');
             });
-        },
+        },*/
         // 先关闭，防止 GitHub Actions 得不到 0 的进程退出代码
         // new BundleAnalyzerPlugin({
         //     openAnalyzer: false // 关闭自动打开浏览器行为
