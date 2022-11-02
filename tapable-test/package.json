@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "run-index": "node index.js",
+    "run-car": "node car.js"
+  },
+  "dependencies": {
+    "tapable": "^2.2.1"
+  }
+}
