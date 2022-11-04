@@ -68,6 +68,7 @@ module.exports = class Compiler {
             require('${this.entry}');
         })({${modules}});`;
 
+        // 为了方便，需要手动创建 dist/bundle.js
         fs.writeFileSync(outputPath, content, 'utf-8');
     }
 };
