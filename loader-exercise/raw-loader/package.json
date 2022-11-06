@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "run:loader": "node run-loader.js"
+  },
+  "dependencies": {
+    "loader-runner": "^3.0.0"
+  }
+}
