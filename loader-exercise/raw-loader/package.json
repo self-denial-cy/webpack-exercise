@@ -1,8 +1,10 @@
 {
   "scripts": {
-    "run:loader": "node run-loader.js"
+    "run:loader": "node run-loader.js",
+    "run:async-loader": "node run-async-loader.js"
   },
   "dependencies": {
-    "loader-runner": "^3.0.0"
+    "loader-runner": "^3.0.0",
+    "loader-utils": "^1.2.3"
   }
 }

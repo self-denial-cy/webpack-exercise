@@ -6,10 +6,7 @@ runLoaders({
     resource: path.join(__dirname, './src/index.js'),
     loaders: [
         {
-            loader: path.join(__dirname, './src/raw-loader.js'),
-            options: {
-                param: 'test'
-            }
+            loader: path.join(__dirname, './src/async-loader.js')
         }
     ],
     context: {
