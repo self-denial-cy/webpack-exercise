@@ -12,6 +12,9 @@ class SimplePlugin {
 
     // webpack 会调用 plugin 的 apply 方法
     apply(compiler) {
+        // compiler 上负责文件生成的 hooks 是 emit，是一个异步的 hook（AsyncSeriesHook）
+        // emit 生成文件阶段，读取的是 compilation.assets 对象上的值
+        // 可以将 资源包 设置到 assets 对象上以供生成文件
         console.log(compiler);
         console.log(this.options);
     }
