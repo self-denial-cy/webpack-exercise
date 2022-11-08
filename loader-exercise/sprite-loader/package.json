@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "run:sprite-loader": "node run-loader.js"
+  },
+  "dependencies": {
+    "loader-runner": "^3.0.0",
+    "spritesmith": "^3.4.0"
+  }
+}
