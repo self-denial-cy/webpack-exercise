@@ -8,11 +8,13 @@ module.exports = {
         path: path.join(__dirname, './dist'),
         filename: 'bundle.js'
     },
-    mode: 'none',
+    mode: 'production',
     plugins: [
         new SimplePlugin({
             tips: 'this is a simple plugin'
         }),
-        new ZipPlugin({})
+        new ZipPlugin({
+            zipName: 'offline'
+        })
     ]
 };
