@@ -8,6 +8,7 @@ class App extends React.Component {
         return <div className="app-text">
             <span>富婆饿饿饭饭</span>
             <img className="app-img" src={image} alt="富婆饿饿饭饭"/>
+            <div className="bg-img"></div>
         </div>;
     }
 }
