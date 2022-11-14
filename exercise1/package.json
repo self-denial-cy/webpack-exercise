@@ -1,6 +1,4 @@
 {
-  "name": "exercise1",
-  "version": "1.0.0",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "build:mpa": "webpack --config webpack.mpa.js",

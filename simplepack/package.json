@@ -1,5 +1,4 @@
 {
-  "name": "simplepack",
   "scripts": {
     "build": "node lib/index.js"
   },

@@ -1,5 +1,4 @@
 {
-  "name": "webpack-exercise",
   "version": "1.0.4",
   "scripts": {
     "commitmsg": "validate-commit-msg",
