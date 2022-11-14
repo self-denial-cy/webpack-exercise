@@ -74,7 +74,7 @@ module.exports = smp.wrap({
         path: path.join(rootDir, 'dist'),
         // js 文件指纹建议使用 chunkhash
         filename: 'js/[name]_[chunkhash:8].js',
-        publicPath: '/app/'
+        publicPath: '/'
     },
     mode: 'production',
     module: {
