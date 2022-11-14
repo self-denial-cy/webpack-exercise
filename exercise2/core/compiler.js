@@ -1,6 +1,7 @@
 const {SyncHook} = require('tapable');
 const {toUnixPath} = require('./utils/index.js');
 const path = require('path');
+const fs = require('fs');
 
 // Compiler 类进行核心编译实现
 class Compiler {
@@ -18,6 +19,21 @@ class Compiler {
             // 在 compilation 完成时执行，编译全部完成执行
             done: new SyncHook()
         };
+
+        // 保存所有入口模块对象
+        this.entries = new Set();
+
+        // 保存所有依赖模块对象
+        this.modules = new Set();
+
+        // 保存所有代码块对象
+        this.chunks = new Set();
+
+        // 保存本次产出的文件对象
+        this.assets = new Set();
+
+        // 保存本次编译所有产出的文件名
+        this.files = new Set();
     }
 
     // run 方法启动编译
@@ -27,6 +43,56 @@ class Compiler {
 
         // 获取 entry
         const entry = this.getEntry();
+
+        // 开始编译
+        this.buildEntryModule(entry);
+    }
+
+    // 从 entry 开始编译
+    buildEntryModule(entry) {
+        Object.keys(entry).forEach(key => {
+            const val = entry[key];
+            const result = this.buildModule(key, val);
+            this.entries.add(result);
+        });
+    }
+
+    // 模块编译方法
+    buildModule(moduleName, modulePath) {
+        // 1.读取文件原始代码
+        let source = this.originSourceCode = fs.readFileSync(modulePath, 'utf-8');
+
+        // moduleCode 为编译后的代码
+        this.moduleCode = source;
+
+        // 2.调用 loader 进行处理
+        this.handleLoader(modulePath);
+    }
+
+    // 匹配 loader 进行处理
+    handleLoader(modulePath) {
+        const matchLoaders = [];
+        // 1.获取所有传入的 loader 规则
+        const rules = this.options.module.rules;
+        rules.forEach(rule => {
+            const testRule = rule.test;
+            if (testRule.test(modulePath)) {
+                if (rule.loader) {
+                    // 考虑一条 rule 下仅配置一个 loader 的情况
+                    matchLoaders.push(rule.loader);
+                } else {
+                    matchLoaders.push(...rule.use);
+                }
+            }
+        });
+        // 2.倒序执行 loader
+        for (let i = matchLoaders.length - 1; i >= 0; i--) {
+            // 目前 loader 仅支持 node_modules 中的包或指定绝对路径两种模式
+            // require 引入对应 loader
+            const loaderFn = require(matchLoaders[i]);
+            // 通过 loader 同步处理上一个 loader 处理后的 moduleCode
+            this.moduleCode = loaderFn(this.moduleCode);
+        }
     }
 
     // 获取 entry

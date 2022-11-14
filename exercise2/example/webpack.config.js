@@ -12,5 +12,15 @@ module.exports = {
     },
     plugins: [
         new Plugin()
-    ]
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                use: [
+                    path.join(__dirname, '../loaders/loader.js')
+                ]
+            }
+        ]
+    }
 };
