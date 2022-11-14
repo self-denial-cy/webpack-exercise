@@ -2,6 +2,10 @@ const {SyncHook} = require('tapable');
 const {toUnixPath} = require('./utils/index.js');
 const path = require('path');
 const fs = require('fs');
+const parser = require('@babel/parser');
+const traverse = require('@babel/traverse').default;
+const generator = require('@babel/generator').default;
+const t = require('@babel/types');
 
 // Compiler 类进行核心编译实现
 class Compiler {
@@ -62,11 +66,61 @@ class Compiler {
         // 1.读取文件原始代码
         let source = this.originSourceCode = fs.readFileSync(modulePath, 'utf-8');
 
-        // moduleCode 为编译后的代码
+        // moduleCode 为 loader 处理后的代码
         this.moduleCode = source;
 
         // 2.调用 loader 进行处理
         this.handleLoader(modulePath);
+
+        // 3.进行模块编译，获得最终的 module 对象
+        const module = this.handleWebpackCompiler(moduleName, modulePath);
+
+        return module;
+    }
+
+    // 进行模块编译
+    handleWebpackCompiler(moduleName, modulePath) {
+        // 将当前模块相对于项目启动根目录计算出相对路径，作为模块 ID
+        const moduleId = './' + path.posix.relative(this.rootPath, modulePath);
+        // 创建模块对象
+        const module = {
+            id: moduleId,
+            dependencies: new Set(), // 该模块所依赖模块的绝对路径地址
+            name: [moduleName] // 该模块所属的入口文件
+        };
+        // 调用 @babel/parser 将代码解析为 AST
+        const ast = parser.parse(this.moduleCode, {
+            sourceType: 'module'
+        });
+        // 深度优先，遍历 ast
+        traverse(ast, {
+            CallExpression: ({node}) => {
+                if (node.callee.name === 'require') {
+                    // 获取源代码中引入模块的相对路径
+                    const requirePath = node.arguments[0].value;
+                    // 获取引入模块的绝对路径
+                    const moduleDirName = path.posix.dirname(modulePath);
+                    const absolutePath = tryExtensions(
+                        path.posix.join(moduleDirName, requirePath),
+                        this.options.resolve.extensions,
+                        requirePath,
+                        moduleDirName
+                    );
+                    // 生成 moduleId —— 基于根路径的模块 ID
+                    const moduleId = './' + path.posix.relative(this.rootPath, absolutePath);
+                    // 修改源代码中的 require 变成 __webpack_require__ 语句
+                    node.callee = t.identifier('__webpack_require__');
+                    // 修改源代码中 require 语句引入的模块，全部修改为基于根路径的引入路径
+                    node.arguments = [t.stringLiteral(moduleId)];
+                    // 当前模块的 dependencies
+                    module.dependencies.add(moduleId);
+                }
+            }
+        });
+        // 遍历结束根据 AST 生成新的代码
+        const {code} = generator(ast);
+        module._source = code;
+        return module;
     }
 
     // 匹配 loader 进行处理
