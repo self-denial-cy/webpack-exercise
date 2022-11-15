@@ -60,11 +60,15 @@ class Compiler {
             this.entries.add(result);
         });
 
-        console.log(this.entries);
+        console.log(this.modules);
     }
 
     // 模块编译方法
     buildModule(moduleName, modulePath) {
+        if (!path.isAbsolute(modulePath)) {
+            modulePath = path.join(this.rootPath, modulePath);
+        }
+
         // 1.读取文件原始代码
         let source = this.originSourceCode = fs.readFileSync(modulePath, 'utf-8');
 
@@ -115,13 +119,29 @@ class Compiler {
                     // 修改源代码中 require 语句引入的模块，全部修改为基于根路径的引入路径
                     node.arguments = [t.stringLiteral(moduleId)];
                     // 当前模块的 dependencies
-                    module.dependencies.add(moduleId);
+                    const alreadyModules = Array.from(this.modules).map(item => item.id);
+                    if (!alreadyModules.includes(moduleId)) {
+                        module.dependencies.add(moduleId);
+                    } else {
+                        this.modules.forEach(item => {
+                            if (item.id === moduleId) {
+                                item.name.push(moduleName);
+                            }
+                        });
+                    }
                 }
             }
         });
         // 遍历结束根据 AST 生成新的代码
         const {code} = generator(ast);
         module._source = code;
+
+        // 对依赖进行递归处理
+        module.dependencies.forEach(dependency => {
+            const depModule = this.buildModule(moduleName, dependency);
+            this.modules.add(depModule);
+        });
+
         return module;
     }
 
