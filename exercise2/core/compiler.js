@@ -1,5 +1,5 @@
 const {SyncHook} = require('tapable');
-const {toUnixPath} = require('./utils/index.js');
+const {toUnixPath, tryExtensions} = require('./utils/index.js');
 const path = require('path');
 const fs = require('fs');
 const parser = require('@babel/parser');
@@ -59,6 +59,8 @@ class Compiler {
             const result = this.buildModule(key, val);
             this.entries.add(result);
         });
+
+        console.log(this.entries);
     }
 
     // 模块编译方法
@@ -81,7 +83,7 @@ class Compiler {
     // 进行模块编译
     handleWebpackCompiler(moduleName, modulePath) {
         // 将当前模块相对于项目启动根目录计算出相对路径，作为模块 ID
-        const moduleId = './' + path.posix.relative(this.rootPath, modulePath);
+        const moduleId = './' + toUnixPath(path.relative(this.rootPath, modulePath));
         // 创建模块对象
         const module = {
             id: moduleId,
@@ -99,15 +101,15 @@ class Compiler {
                     // 获取源代码中引入模块的相对路径
                     const requirePath = node.arguments[0].value;
                     // 获取引入模块的绝对路径
-                    const moduleDirName = path.posix.dirname(modulePath);
+                    const moduleDirName = path.dirname(modulePath);
                     const absolutePath = tryExtensions(
-                        path.posix.join(moduleDirName, requirePath),
+                        path.join(moduleDirName, requirePath),
                         this.options.resolve.extensions,
                         requirePath,
                         moduleDirName
                     );
                     // 生成 moduleId —— 基于根路径的模块 ID
-                    const moduleId = './' + path.posix.relative(this.rootPath, absolutePath);
+                    const moduleId = './' + toUnixPath(path.relative(this.rootPath, absolutePath));
                     // 修改源代码中的 require 变成 __webpack_require__ 语句
                     node.callee = t.identifier('__webpack_require__');
                     // 修改源代码中 require 语句引入的模块，全部修改为基于根路径的引入路径
@@ -164,8 +166,8 @@ class Compiler {
         Object.keys(entry).forEach(key => {
             const val = entry[key];
             if (!path.isAbsolute(val)) {
-                // 转换为绝对路径的同时统一路径分隔符为 /
-                entry[key] = toUnixPath(path.join(this.rootPath, val));
+                // 转换为绝对路径
+                entry[key] = path.join(this.rootPath, val);
             }
         });
 

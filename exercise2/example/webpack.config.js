@@ -3,7 +3,7 @@ const Plugin = require('../plugins/plugin.js');
 
 module.exports = {
     entry: {
-        app1: path.join(__dirname, './src/entry1.js'),
+        app1: './example/src/entry1.js',
         app2: path.join(__dirname, './src/entry2.js')
     },
     output: {
@@ -25,5 +25,6 @@ module.exports = {
     },
     resolve: {
         extensions: ['.js']
-    }
+    },
+    context: path.join(__dirname, '../../exercise2')
 };

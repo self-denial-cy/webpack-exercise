@@ -16,7 +16,7 @@ function webpack(options) {
 
 // 合并参数方法
 function _mergeOptions(options) {
-    console.log(process.argv);
+    // console.log(process.argv);
     const shellOptions = process.argv.slice(2).reduce((option, argv) => {
         // argv -> --mode=production
         const [key, val] = argv.split('=');
