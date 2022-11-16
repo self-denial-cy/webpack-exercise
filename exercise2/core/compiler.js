@@ -1,5 +1,5 @@
 const {SyncHook} = require('tapable');
-const {toUnixPath, tryExtensions} = require('./utils/index.js');
+const {toUnixPath, tryExtensions, getSourceCode} = require('./utils/index.js');
 const path = require('path');
 const fs = require('fs');
 const parser = require('@babel/parser');
@@ -50,6 +50,38 @@ class Compiler {
 
         // 开始编译
         this.buildEntryModule(entry);
+
+        // 将每个 chunk 转换为单独的文件加入到输出列表 assets 中
+        this.exportFiles(callback);
+    }
+
+    exportFiles(callback) {
+        const output = this.options.output;
+        this.chunks.forEach(chunk => {
+            const parseFileName = output.filename.replace('[name]', chunk.name);
+            this.assets[parseFileName] = getSourceCode(chunk);
+            this.files.add(parseFileName);
+        });
+        this.hooks.emit.call();
+        if (!fs.existsSync(output.path)) {
+            fs.mkdirSync(output.path);
+        }
+        Object.keys(this.assets).forEach(fileName => {
+            const filePath = path.join(output.path, fileName);
+            fs.writeFileSync(filePath, this.assets[fileName]);
+        });
+        this.hooks.done.call();
+        callback(null, {
+            toJson: () => {
+                return {
+                    entries: this.entries,
+                    modules: this.modules,
+                    files: this.files,
+                    chunks: this.chunks,
+                    assets: this.assets
+                }
+            }
+        });
     }
 
     // 从 entry 开始编译
@@ -58,9 +90,21 @@ class Compiler {
             const val = entry[key];
             const result = this.buildModule(key, val);
             this.entries.add(result);
+            // 根据 entries 中模块的 dependencies 和 modules 中模块的 name，为每一个入口模块组装包含其所有依赖模块的 chunk
+            this.buildUpChunk(key, result);
         });
+    }
 
-        console.log(this.modules);
+    // 根据入口模块和依赖模块组装 chunk
+    buildUpChunk(entryName, entryModule) {
+        const chunk = {
+            name: entryName,
+            entryModule: entryModule,
+            modules: Array.from(this.modules).filter(module => {
+                return module.name.includes(entryName);
+            })
+        };
+        this.chunks.add(chunk);
     }
 
     // 模块编译方法
@@ -125,6 +169,7 @@ class Compiler {
                     } else {
                         this.modules.forEach(item => {
                             if (item.id === moduleId) {
+                                // moduleName 将 entryName 递归向下传递
                                 item.name.push(moduleName);
                             }
                         });
@@ -138,6 +183,7 @@ class Compiler {
 
         // 对依赖进行递归处理
         module.dependencies.forEach(dependency => {
+            // moduleName 将 entryName 递归向下传递
             const depModule = this.buildModule(moduleName, dependency);
             this.modules.add(depModule);
         });

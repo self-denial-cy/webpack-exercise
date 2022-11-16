@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "run:pack": "node core/index.js"
+  },
   "dependencies": {
     "@babel/generator": "^7.20.4",
     "@babel/parser": "^7.20.3",
