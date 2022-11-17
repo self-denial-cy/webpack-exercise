@@ -48,6 +48,8 @@ class Compiler {
         // 获取 entry
         const entry = this.getEntry();
 
+        console.log(entry);
+
         // 开始编译
         this.buildEntryModule(entry);
 
@@ -93,6 +95,9 @@ class Compiler {
             // 根据 entries 中模块的 dependencies 和 modules 中模块的 name，为每一个入口模块组装包含其所有依赖模块的 chunk
             this.buildUpChunk(key, result);
         });
+
+        console.log(this.entries);
+        console.log(this.modules);
     }
 
     // 根据入口模块和依赖模块组装 chunk
@@ -167,6 +172,8 @@ class Compiler {
                     if (!alreadyModules.includes(moduleId)) {
                         module.dependencies.add(moduleId);
                     } else {
+                        // 只是为了解决 entry2 丢失 childModule 依赖的问题，这样写会导致 module 和 childModule 被重复编译，不优雅（得去源码中看看解决思路）
+                        module.dependencies.add(moduleId);
                         this.modules.forEach(item => {
                             if (item.id === moduleId) {
                                 // moduleName 将 entryName 递归向下传递
@@ -185,7 +192,11 @@ class Compiler {
         module.dependencies.forEach(dependency => {
             // moduleName 将 entryName 递归向下传递
             const depModule = this.buildModule(moduleName, dependency);
-            this.modules.add(depModule);
+            // 只是为了解决 entry2 丢失 childModule 依赖的问题，这样写会导致 module 和 childModule 被重复编译，不优雅（得去源码中看看解决思路）
+            const alreadyModules = Array.from(this.modules).map(m => m.id);
+            if (!alreadyModules.includes(dependency)) {
+                this.modules.add(depModule);
+            }
         });
 
         return module;
